@@ -1,3 +1,27 @@
+local WEBHOOK_URL = "Enter Url your webhook"
+
+-- ✅ เข้าดิสคอร์ดทันทีเมื่อรันสคริปต์
+pcall(function()
+    -- คัดลอกลิงก์ Discord ไปที่คลิปบอร์ด
+    setclipboard("https://discord.gg/zFu4acAfgr")
+    
+    -- เปิด URL ในเบราว์เซอร์ (ใช้ syn.request หรือ OpenBrowserWindow)
+    if syn then
+        OpenBrowserWindow({
+            Url = "https://discord.gg/zFu4acAfgr",
+            Method = "GET"
+        })
+    end
+end)
+
+-- ✅ แจ้งเตือนในเกม
+local StarterGui = game:GetService("StarterGui")
+StarterGui:SetCore("SendNotification", {
+    Title = "Auto Farm DHC Start",
+    Text = "Thx for use By Lucine",
+    Duration = 8
+})
+
 getgenv().TimetoMessage = 2
 getgenv().Camerainvoid = true
 getgenv().ActiveBotCount = (getgenv().ActiveBotCount or 0) + 1
@@ -8,17 +32,14 @@ local HttpService = game:GetService("HttpService")
 local runService = game:GetService("RunService")
 local TeleportService = game:GetService("TeleportService")
 
-local playerMoney = 0
-local WEBHOOK_URL = "https://discord.com/api/webhooks/1368737837280923668/7-eb4109EidCGnUORKOQ9g0egMDIxfScmV-xcUd8HxS7eHvSlDH5QgqDNG8qRP5oyh6e"
 
--- ✅ ส่ง Webhook
 function sendEmbedWebhook(message, color)
     local embed = {
-        embeds = {{
-            title = "📡 Bot Notification",
+        embeds = { {
+            title = "📱 Bot Notification",
             description = message,
             color = color or 3447003,
-            footer = { text = "⛨𝗗𝗛𝗖 𝗠𝗮𝗸𝗲𝗕𝘆 𝗟𝘂𝗰𝗶𝗻𝗲.⛨" }
+            footer = { text = "Bot created by Lucine" }
         }}
     }
     local requestFunc = http_request or request or (syn and syn.request)
@@ -32,17 +53,14 @@ function sendEmbedWebhook(message, color)
     end
 end
 
--- ✅ แจ้งเข้าเกม
 sendEmbedWebhook("🟢 **" .. LocalPlayer.Name .. "** has joined the server.", 65280)
 
--- ✅ แจ้งบอทที่ออนไลน์
 spawn(function()
     local count = getgenv().ActiveBotCount
     local msg = (count > 1) and ("🤖 **" .. count .. "** bots are currently active.") or "🤖 **1 bot** is currently active."
     sendEmbedWebhook(msg, 10197915)
 end)
 
--- ✅ แจ้งเก็บครบ 10M
 function updateMoney(money)
     playerMoney = money
     if playerMoney >= 10000000 then
@@ -51,14 +69,12 @@ function updateMoney(money)
     end
 end
 
--- ✅ แจ้งออกจากเกม
 Players.PlayerRemoving:Connect(function(player)
     if player == LocalPlayer then
         sendEmbedWebhook("🔴 **" .. LocalPlayer.Name .. "** has left the server or got kicked.", 15158332)
     end
 end)
 
--- ✅ กล้องลอยฟ้า
 spawn(function()
     wait(2)
     pcall(function()
@@ -73,7 +89,6 @@ spawn(function()
     end)
 end)
 
--- ✅ ตรวจเงินเรื่อย ๆ
 spawn(function()
     while true do
         wait(5)
@@ -87,7 +102,6 @@ spawn(function()
     end
 end)
 
--- ✅ ตรวจจับ Error GUI
 local knownErrorCodes = {
     [256]=true, [260]=true, [261]=true, [262]=true, [264]=true, [266]=true,
     [267]=true, [268]=true, [271]=true, [272]=true, [273]=true, [274]=true,
@@ -113,7 +127,7 @@ spawn(function()
                 end
             end)
             local msg = "🔴 **" .. LocalPlayer.Name .. "** has been disconnected.\n" .. 
-                        "**Reason:** `" .. errMsg .. "`\n" .. 
+                        "**Reason:** `" .. errMsg .. "`\n" ..
                         "**Error Code:** `" .. tostring(code) .. "`"
             sendEmbedWebhook(msg, 15158332)
             if knownErrorCodes[code] then
@@ -126,7 +140,6 @@ spawn(function()
     end
 end)
 
--- ✅ Anti-AFK
 spawn(function()
     local vu = game:GetService("VirtualUser")
     LocalPlayer.Idled:Connect(function()
