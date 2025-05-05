@@ -1,5 +1,3 @@
-local WEBHOOK_URL = "Enter Url your webhook"
-
 -- ✅ เข้าดิสคอร์ดทันทีเมื่อรันสคริปต์
 pcall(function()
     -- คัดลอกลิงก์ Discord ไปที่คลิปบอร์ด
